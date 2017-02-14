@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users List</title>
+
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+<div id="content"></div>
+
+<script type="text/babel">
+  (async function () {
+    const userResponse = await fetch('https://jsonplaceholder.typicode.com/users');
+    const usersArray = await userResponse.json();
+
+    const UserCard = React.createClass({
+      render: function () {
+        return <li>{this.props.name}</li>
+      }
+    });
+
+    const UsersList = React.createClass({
+
+      getInitialState: function () {
+        return {
+          displayedUsers: usersArray
+        }
+      },
+
+      handleSearch: function (e) {
+        let searchQuery = e.target.value;
+        console.log(e.target.value);
+      },
+
+      render: function () {
+        return <div>
+            <input type="text" onChange={this.handleSearch}/>
+            <ul>
+              {usersArray.map(user => <UserCard key={user.id} name={user.name}/>)}
+            </ul>
+        </div>
+      }
+    });
+
+    ReactDOM.render(<UsersList/>, document.getElementById('content'));
+
+  })();
+</script>
+</body>
+</html>
